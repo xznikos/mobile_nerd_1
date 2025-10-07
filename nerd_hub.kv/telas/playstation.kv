@@ -1,0 +1,26 @@
+#:import dp kivy.metrics.dp
+
+<PlaystationScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        padding: dp(20)
+        spacing: dp(10)
+
+        Label:
+            text: "Tela PlayStation"
+            font_size: dp(24)
+            halign: 'center'
+            valign: 'middle'
+            text_size: self.size
+
+        Button:
+            text: "Voltar"
+            size_hint_y: None
+            height: dp(45)
+            background_normal: ''
+            background_color: 0.78, 0.78, 0.78, 1
+            color: 0, 0, 0, 1
+            on_release:
+                # Volta para a tela home
+                app.root.transition.direction = "right"
+                app.root.current = "home"

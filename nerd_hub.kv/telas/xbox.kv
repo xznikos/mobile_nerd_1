@@ -1,0 +1,27 @@
+#:import dp kivy.metrics.dp
+
+<XboxScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        padding: dp(20)
+        spacing: dp(10)
+
+        Label:
+            text: "Tela Xbox"
+            font_size: dp(24)
+            halign: 'center'
+            valign: 'middle'
+            text_size: self.size
+
+        Button:
+            text: "Voltar"
+            size_hint_y: None
+            height: dp(45)
+            background_normal: ''
+            background_color: 0.78, 0.78, 0.78, 1
+            color: 0, 0, 0, 1
+            font_size: dp(16)
+            bold: True
+            on_release:
+                app.root.transition.direction = "right"
+                app.root.current = "home"
