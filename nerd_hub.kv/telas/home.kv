@@ -28,6 +28,15 @@
         padding: [dp(8), dp(8)]
         font_size: '14sp'
     Button:
+        text: "🛒"
+        background_normal: ''
+        background_color: 1,1,1,1
+        size_hint_x: None
+        width: dp(40)
+        on_release:
+            app.root.transition.direction = "left"
+            app.root.current = "carrinho"
+    Button:
         text: "👤"
         background_normal: ''
         background_color: 1,1,1,1
@@ -36,6 +45,7 @@
         on_release:
             app.root.transition.direction = "left"
             app.root.current = "login"
+
 
 <Banner@BoxLayout>:
     size_hint_y: None
@@ -58,12 +68,16 @@
         valign: 'middle'
         text_size: self.size
 
+
 <ProductCard@BoxLayout>:
     orientation: 'vertical'
     size_hint_y: None
     height: dp(250)
     padding: dp(8)
     spacing: dp(5)
+    title: ''
+    price: ''
+    product_data: {}
     canvas.before:
         Color:
             rgba: 1,1,1,1
@@ -109,13 +123,18 @@
         background_color: 0.07,0.57,0.38,1
         color: 1,1,1,1
         font_size: '12sp'
+        on_release:
+            app.adicionar_ao_carrinho({'title': root.title, 'price': root.price})
+
 
 <HomeScreen>:
     BoxLayout:
         orientation: 'vertical'
         padding: dp(8)
         spacing: dp(8)
+
         Header:
+
         ScrollView:
             do_scroll_x: False
             GridLayout:

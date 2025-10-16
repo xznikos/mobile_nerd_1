@@ -10,6 +10,7 @@ from paginas.starwars import StarWarsScreen
 from paginas.xbox import XboxScreen
 from paginas.home import HomeScreen
 from paginas.login import LoginScreen  # Tela de login
+from paginas.carrinho import CarrinhoScreen
 
 # Tamanho da janela (opcional, para desktop)
 Window.size = (420, 900)
@@ -28,6 +29,8 @@ class NerdHubApp(App):
         Builder.load_file("telas/marvel.kv")
         Builder.load_file("telas/starwars.kv")
         Builder.load_file("telas/disney.kv")
+        Builder.load_file("telas/carrinho.kv")
+
 
         sm = Gerenciador()
         # Telas principais
@@ -40,8 +43,14 @@ class NerdHubApp(App):
         sm.add_widget(MarvelScreen(name="marvel"))
         sm.add_widget(StarWarsScreen(name="starwars"))
         sm.add_widget(DisneyScreen(name="disney"))
+        sm.add_widget(CarrinhoScreen(name="carrinho"))
 
         return sm
+    
+    def adicionar_ao_carrinho(self, produto):
+        carrinho = self.root.get_screen("carrinho")
+        carrinho.itens.append(produto)
+        carrinho.atualizar_lista()
 
 if __name__ == "__main__":
     NerdHubApp().run()
