@@ -1,7 +1,11 @@
 from kivy.app import App
 from kivy.lang import Builder
 from kivy.core.window import Window
-from kivy.uix.screenmanager import ScreenManager
+from kivy.uix.screenmanager import ScreenManager, Screen
+from kivy.uix.carousel import Carousel
+from kivy.uix.image import Image
+from kivy.uix.behaviors import ButtonBehavior
+from kivy.clock import Clock
 
 from paginas.playstation import PlaystationScreen
 from paginas.disney import DisneyScreen
@@ -18,6 +22,13 @@ Window.size = (420, 900)
 # Gerenciador de telas
 class Gerenciador(ScreenManager):
     pass
+
+class HomeScreen(Screen):
+    def on_enter(self):
+        Clock.schedule_once(self.show_first_banner, 0)
+    
+    def show_first_banner(self, dt):
+        self.ids.subbanner_carousel.index = 0
 
 class NerdHubApp(App):
     def build(self):

@@ -1,9 +1,13 @@
 #:import dp kivy.metrics.dp
 
+<ImageButton@ButtonBehavior+Image>:
+    allow_stretch: True
+    keep_ratio: True
+
 <Header@BoxLayout>:
     size_hint_y: None
-    height: dp(56)
-    padding: dp(8)
+    height: dp(60)  # um pouco mais alto
+    padding: dp(5)
     spacing: dp(8)
     canvas.before:
         Color:
@@ -11,12 +15,14 @@
         Rectangle:
             pos: self.pos
             size: self.size
+
     Label:
         text: "NERD HUB"
         color: 1, 1, 1, 1
         font_size: '18sp'
         size_hint_x: None
-        width: dp(100)
+        width: dp(120)
+
     TextInput:
         hint_text: "O que você está procurando?"
         multiline: False
@@ -27,47 +33,44 @@
         size_hint_x: 1
         padding: [dp(8), dp(8)]
         font_size: '14sp'
-    Button:
-        text: "🛒"
-        background_normal: ''
-        background_color: 1,1,1,1
-        size_hint_x: None
-        width: dp(40)
+
+    ImageButton:
+        source: 'nerd_hub.kv/imagens/imagens_home/carrinho.png'
+        size_hint: None, None
+        width: dp(25)
+        height: dp(25)
+        allow_stretch: True
+        keep_ratio: True
         on_release:
             app.root.transition.direction = "left"
             app.root.current = "carrinho"
-    Button:
-        text: "👤"
-        background_normal: ''
-        background_color: 1,1,1,1
-        size_hint_x: None
-        width: dp(40)
+
+    ImageButton:
+        source: 'nerd_hub.kv/imagens/imagens_home/perfil.png'
+        size_hint: None, None
+        width: dp(25)
+        height: dp(25)
+        allow_stretch: True
+        keep_ratio: True
         on_release:
             app.root.transition.direction = "left"
             app.root.current = "login"
 
-
 <Banner@BoxLayout>:
     size_hint_y: None
-    height: dp(150)
-    padding: dp(10)
-    spacing: dp(10)
+    height: dp(200)
+    padding: dp(10), dp(5)
+    spacing: 0
+    orientation: 'horizontal'
     canvas.before:
         Color:
-            rgba: 0.15, 0.6, 0.85, 1
-        RoundedRectangle:
+            rgba: 1, 1, 1, 1
+        Rectangle:
             pos: self.pos
             size: self.size
-            radius: [dp(10),]
-    Label:
-        markup: True
-        text: "[b]50% OFF\\nProdutos Selecionados[/b]"
-        color: 1,1,1,1
-        font_size: '20sp'
-        halign: 'center'
-        valign: 'middle'
-        text_size: self.size
-
+            source: "imagens/imagens_home/banner_principal.png"
+    Widget:
+        size_hint_x: 0.5
 
 <ProductCard@BoxLayout>:
     orientation: 'vertical'
@@ -126,43 +129,154 @@
         on_release:
             app.adicionar_ao_carrinho({'title': root.title, 'price': root.price})
 
-
 <HomeScreen>:
+    canvas.before:
+        Color:
+            rgba: 0.9, 0.9, 0.9, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
     BoxLayout:
         orientation: 'vertical'
-        padding: dp(8)
-        spacing: dp(8)
+        padding: 0
+        spacing: 0
 
         Header:
 
+        # ScrollView engloba banners + produtos
         ScrollView:
             do_scroll_x: False
+            do_scroll_y: True
+            bar_width: 0
+
             GridLayout:
                 cols: 1
-                spacing: dp(10)
+                spacing: 0
                 size_hint_y: None
                 height: self.minimum_height
+                padding: 0
 
                 Banner:
 
+                Widget:
+                    size_hint_y: None
+                    height: dp(10)
+
+                # Carousel centralizado de banners das marcas
                 Carousel:
                     id: subbanner_carousel
                     direction: 'right'
                     loop: True
                     size_hint_y: None
-                    height: dp(70)
+                    height: dp(200)
+                    anim_move_duration: 0.3
+                    scroll_timeout: 200
+                    spacing: dp(15)
+
+                    FloatLayout:
+                        size_hint: None, None
+                        size: dp(400), dp(200)
+                        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                        ImageButton:
+                            source: "imagens/imagens_home/banner_disney.png"
+                            size_hint: 1, 1
+                            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                            on_release:
+                                app.root.transition.direction = "left"
+                                app.root.current = "disney"
+
+                    FloatLayout:
+                        size_hint: None, None
+                        size: dp(400), dp(200)
+                        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                        ImageButton:
+                            source: "imagens/imagens_home/banner_xbox.png"
+                            size_hint: 1, 1
+                            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                            on_release:
+                                app.root.transition.direction = "left"
+                                app.root.current = "xbox"
+
+                    FloatLayout:
+                        size_hint: None, None
+                        size: dp(400), dp(200)
+                        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                        ImageButton:
+                            source: "imagens/imagens_home/banner_marvel.png"
+                            size_hint: 1, 1
+                            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                            on_release:
+                                app.root.transition.direction = "left"
+                                app.root.current = "marvel"
+
+                    FloatLayout:
+                        size_hint: None, None
+                        size: dp(400), dp(200)
+                        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                        ImageButton:
+                            source: "imagens/imagens_home/banner_playstation.png"
+                            size_hint: 1, 1
+                            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                            on_release:
+                                app.root.transition.direction = "left"
+                                app.root.current = "playstation"
+
+                    FloatLayout:
+                        size_hint: None, None
+                        size: dp(400), dp(200)
+                        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                        ImageButton:
+                            source: "imagens/imagens_home/banner_starwars.png"
+                            size_hint: 1, 1
+                            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                            on_release:
+                                app.root.transition.direction = "left"
+                                app.root.current = "starwars"
+
+                # Espaço entre carousel e produtos
+                Widget:
+                    size_hint_y: None
+                    height: dp(10)
 
                 Label:
                     text: "PRODUTOS EM DESTAQUE"
-                    bold: True
                     size_hint_y: None
-                    height: dp(30)
+                    height: dp(32)
+                    bold: True
                     color: 0,0,0,1
+                    halign: 'center'
+                    valign: 'middle'
+                    text_size: self.size
 
                 GridLayout:
-                    id: products_grid
                     cols: 2
                     spacing: dp(8)
                     size_hint_y: None
                     height: self.minimum_height
                     row_default_height: dp(250)
+
+                    ProductCard:
+                        title: "Produto 1"
+                        price: "R$ 100"
+                    ProductCard:
+                        title: "Produto 2"
+                        price: "R$ 150"
+                    ProductCard:
+                        title: "Produto 3"
+                        price: "R$ 200"
+                    ProductCard:
+                        title: "Produto 4"
+                        price: "R$ 250"
+                    ProductCard:
+                        title: "Produto 5"
+                        price: "R$ 100"
+                    ProductCard:
+                        title: "Produto 6"
+                        price: "R$ 150"
+                    ProductCard:
+                        title: "Produto 7"
+                        price: "R$ 200"
+                    ProductCard:
+                        title: "Produto 8"
+                        price: "R$ 250"
