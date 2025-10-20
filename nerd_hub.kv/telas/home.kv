@@ -6,9 +6,9 @@
 
 <Header@BoxLayout>:
     size_hint_y: None
-    height: dp(60)  # um pouco mais alto
-    padding: dp(5)
-    spacing: dp(8)
+    height: dp(60)
+    padding: dp(10), 0
+    spacing: dp(10)
     canvas.before:
         Color:
             rgba: 0.07, 0.57, 0.38, 1
@@ -22,39 +22,52 @@
         font_size: '18sp'
         size_hint_x: None
         width: dp(120)
+        halign: 'center'
+        valign: 'middle'
+        text_size: self.size
 
     TextInput:
-        hint_text: "O que você está procurando?"
+        hint_text: "Buscar..."
         multiline: False
         background_normal: ''
         background_active: ''
         background_color: 1,1,1,1
         foreground_color: 0,0,0,1
-        size_hint_x: 1
-        padding: [dp(8), dp(8)]
         font_size: '14sp'
+        size_hint_x: 1.5
+        size_hint_y: None
+        height: dp(36)
+        padding: [dp(12), dp(10)]
+        radius: [dp(8),]
+        pos_hint: {'center_y': 0.5}
 
-    ImageButton:
-        source: 'nerd_hub.kv/imagens/imagens_home/carrinho.png'
-        size_hint: None, None
-        width: dp(25)
-        height: dp(25)
-        allow_stretch: True
-        keep_ratio: True
-        on_release:
-            app.root.transition.direction = "left"
-            app.root.current = "carrinho"
+    BoxLayout:
+        size_hint_x: None
+        width: dp(80)
+        spacing: dp(10)
+        padding: 0, dp(12)
 
-    ImageButton:
-        source: 'nerd_hub.kv/imagens/imagens_home/perfil.png'
-        size_hint: None, None
-        width: dp(25)
-        height: dp(25)
-        allow_stretch: True
-        keep_ratio: True
-        on_release:
-            app.root.transition.direction = "left"
-            app.root.current = "login"
+        ImageButton:
+            source: 'nerd_hub.kv/imagens/imagens_home/carrinho.png'
+            size_hint: None, None
+            width: dp(25)
+            height: dp(25)
+            allow_stretch: True
+            keep_ratio: True
+            on_release:
+                app.root.transition.direction = "left"
+                app.root.current = "carrinho"
+
+        ImageButton:
+            source: 'nerd_hub.kv/imagens/imagens_home/perfil.png'
+            size_hint: None, None
+            width: dp(25)
+            height: dp(25)
+            allow_stretch: True
+            keep_ratio: True
+            on_release:
+                app.root.transition.direction = "left"
+                app.root.current = "login"
 
 <Banner@BoxLayout>:
     size_hint_y: None
@@ -144,7 +157,6 @@
 
         Header:
 
-        # ScrollView engloba banners + produtos
         ScrollView:
             do_scroll_x: False
             do_scroll_y: True
@@ -163,7 +175,6 @@
                     size_hint_y: None
                     height: dp(10)
 
-                # Carousel centralizado de banners das marcas
                 Carousel:
                     id: subbanner_carousel
                     direction: 'right'
@@ -234,20 +245,28 @@
                                 app.root.transition.direction = "left"
                                 app.root.current = "starwars"
 
-                # Espaço entre carousel e produtos
                 Widget:
                     size_hint_y: None
                     height: dp(10)
 
-                Label:
-                    text: "PRODUTOS EM DESTAQUE"
+                BoxLayout:
                     size_hint_y: None
                     height: dp(32)
-                    bold: True
-                    color: 0,0,0,1
-                    halign: 'center'
-                    valign: 'middle'
-                    text_size: self.size
+                    padding: dp(8), 0
+                    canvas.before:
+                        Color:
+                            rgba: 0.07, 0.57, 0.38, 1
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+                    Label:
+                        text: "PRODUTOS EM DESTAQUE"
+                        color: 1, 1, 1, 1
+                        bold: True
+                        font_size: '16sp'
+                        halign: 'center'
+                        valign: 'middle'
+                        text_size: self.size
 
                 GridLayout:
                     cols: 2
