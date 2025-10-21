@@ -1,57 +1,71 @@
+# paginas/home.py
+import sqlite3
 from kivy.uix.screenmanager import Screen
 from kivy.properties import StringProperty
-from kivy.uix.button import Button
 from kivy.uix.boxlayout import BoxLayout
 from kivy.metrics import dp
 
 class ProductCard(BoxLayout):
     title = StringProperty()
     price = StringProperty()
+    image = StringProperty()
 
 class HomeScreen(Screen):
-    def on_kv_post(self, base_widget):
-        # Carousel de marcas
-        marcas = [
-            {"nome": "PlayStation", "cor": (0.15, 0.5, 0.85, 1), "tela": "playstation"},
-            {"nome": "Xbox", "cor": (0, 0.6, 0, 1), "tela": "xbox"},
-            {"nome": "Marvel", "cor": (0.8, 0, 0, 1), "tela": "marvel"},
-            {"nome": "StarWars", "cor": (0, 0, 0, 1), "tela": "starwars"},
-            {"nome": "Disney", "cor": (1, 0.85, 0, 1), "tela": "disney"},
-        ]
+    def on_pre_enter(self):
+        """Garante que o banco exista e tenha produtos"""
+        self.criar_banco()
+        self.carregar_produtos()
 
-        carousel = self.ids.subbanner_carousel
-        carousel.clear_widgets()  # limpa antes de adicionar slides
+    def criar_banco(self):
+        conexao = sqlite3.connect("banco/produtos.db")
+        cursor = conexao.cursor()
 
-        for marca in marcas:
-            # Cada slide precisa ocupar todo o espaço
-            slide = BoxLayout(size_hint=(1, 1), padding=dp(5))
-            btn = Button(
-                text=marca["nome"],
-                background_normal='',
-                background_color=marca["cor"],
-                color=(1, 1, 1, 1),
-                bold=True,
-                on_release=lambda btn, tela=marca["tela"]: self.ir_para_tela(tela)
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS produtos (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                title TEXT NOT NULL,
+                price TEXT NOT NULL,
+                image TEXT
             )
-            slide.add_widget(btn)
-            carousel.add_widget(slide)
+        """)
+
+        # Se o banco estiver vazio, insere os produtos iniciais
+        cursor.execute("SELECT COUNT(*) FROM produtos")
+        total = cursor.fetchone()[0]
+        if total == 0:
+            produtos_iniciais = [
+                ("FORZA - Xbox Series X", "R$ 179,00", "imagens/forza.jpg"),
+                ("LEGO Minecraft - Aventura", "R$ 1.349,90", "imagens/lego_minecraft.jpg"),
+                ("PlayStation 5 Pro", "R$ 6.509,00", "imagens/ps5.jpg"),
+                ("PlayStation Portal", "R$ 1.349,90", "imagens/portal.jpg"),
+                ("Funko Pop! Star Wars", "R$ 389,90", "imagens/funko.jpg"),
+                ("Camiseta Marvel Avengers", "R$ 82,35", "imagens/camiseta_marvel.jpg"),
+                ("Pelúcia Chewbacca", "R$ 141,50", "imagens/chewbacca.jpg"),
+                ("LEGO Star Wars - 75257", "R$ 201,00", "imagens/lego_starwars.jpg"),
+            ]
+            cursor.executemany(
+                "INSERT INTO produtos (title, price, image) VALUES (?, ?, ?)",
+                produtos_iniciais
+            )
+            conexao.commit()
+
+        conexao.close()
+
+    def carregar_produtos(self):
+        """Carrega produtos do banco e exibe na tela"""
+        conexao = sqlite3.connect("banco/produtos.db")
+        cursor = conexao.cursor()
+
+        cursor.execute("SELECT title, price, image FROM produtos")
+        produtos = cursor.fetchall()
+        conexao.close()
+
+        grid = self.ids.products_grid
+        grid.clear_widgets()
+
+        for p in produtos:
+            card = ProductCard(title=p[0], price=p[1], image=p[2])
+            grid.add_widget(card)
 
     def ir_para_tela(self, tela):
         self.manager.current = tela
-
-    def on_enter(self):
-        grid = self.ids.products_grid
-        if len(grid.children) == 0:
-            produtos = [
-                {"title": "FORZA - Xbox Series X", "price": "R$ 179,00"},
-                {"title": "LEGO Minecraft - Aventura", "price": "R$ 1.349,90"},
-                {"title": "PlayStation 5 Pro", "price": "R$ 6.509,00"},
-                {"title": "PlayStation Portal", "price": "R$ 1.349,90"},
-                {"title": "Funko Pop! Star Wars", "price": "R$ 389,90"},
-                {"title": "Camiseta Marvel Avengers", "price": "R$ 82,35"},
-                {"title": "Pelúcia Chewbacca", "price": "R$ 141,50"},
-                {"title": "LEGO Star Wars - 75257", "price": "R$ 201,00"},
-            ]
-            for p in produtos:
-                card = ProductCard(title=p["title"], price=p["price"])
-                grid.add_widget(card)

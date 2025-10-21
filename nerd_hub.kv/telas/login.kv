@@ -1,11 +1,13 @@
 #:import dp kivy.metrics.dp
 
 <LoginScreen>:
+    mensagem: mensagem_label.text
+
     BoxLayout:
         orientation: 'vertical'
         spacing: dp(10)
 
-        # HEADER VERDE (somente título)
+        # HEADER VERDE
         BoxLayout:
             size_hint_y: None
             height: dp(56)
@@ -26,7 +28,7 @@
                 valign: 'middle'
                 text_size: self.size
 
-        # CORPO DO LOGIN
+        # CORPO
         BoxLayout:
             orientation: 'vertical'
             padding: dp(20)
@@ -44,6 +46,17 @@
                 text_size: self.size
 
             TextInput:
+                id: nome_input
+                hint_text: "Nome (para cadastro)"
+                font_size: dp(16)
+                background_color: 1, 1, 1, 1
+                foreground_color: 0, 0, 0, 1
+                size_hint_y: None
+                height: dp(50)
+                padding: [dp(10), dp(10)]
+
+            TextInput:
+                id: email_input
                 hint_text: "Usuário ou E-mail"
                 font_size: dp(16)
                 background_color: 1, 1, 1, 1
@@ -53,6 +66,7 @@
                 padding: [dp(10), dp(10)]
 
             TextInput:
+                id: senha_input
                 hint_text: "Senha"
                 password: True
                 font_size: dp(16)
@@ -61,6 +75,17 @@
                 size_hint_y: None
                 height: dp(50)
                 padding: [dp(10), dp(10)]
+
+            Label:
+                id: mensagem_label
+                text: ""
+                color: 1, 0, 0, 1
+                font_size: dp(14)
+                size_hint_y: None
+                height: dp(24)
+                halign: 'center'
+                valign: 'middle'
+                text_size: self.size
 
             Button:
                 text: "Entrar"
@@ -71,11 +96,19 @@
                 color: 1, 1, 1, 1
                 font_size: dp(16)
                 bold: True
-                on_release:
-                    app.root.transition.direction = "left"
-                    app.root.current = "home"
+                on_release: root.fazer_login()
 
-            # ---- Botão VOLTAR colocado abaixo do Entrar (como você pediu) ----
+            Button:
+                text: "Cadastrar"
+                size_hint_y: None
+                height: dp(45)
+                background_normal: ''
+                background_color: 0.07, 0.57, 0.38, 1
+                color: 1, 1, 1, 1
+                font_size: dp(16)
+                bold: True
+                on_release: root.cadastrar()
+
             Button:
                 text: "Voltar"
                 size_hint_y: None
